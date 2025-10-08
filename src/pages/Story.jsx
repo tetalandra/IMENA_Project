@@ -1,105 +1,106 @@
-import React, { useMemo, useState } from "react"
-import story1 from "../assets/storyPhotos/story1.jpeg";
-import story2 from "../assets/storyPhotos/story2.jpeg";
-import story3 from "../assets/storyPhotos/story3.jpg";
-import story4 from "../assets/storyPhotos/story4.jpg";
-import story5 from "../assets/storyPhotos/story5.jpg";
-import story6 from "../assets/storyPhotos/story6.jpg";
+import React, { useEffect, useMemo, useState } from "react"
+import { client } from "../sanityClient"
 import Ange from "../assets/storyPhotos/Ange2.jpg";
 import Nziza from "../assets/storyPhotos/Nziza.jpg";
 
-const pagesData = [
-  {
-    id: 1,
-    title: "2020",
-    description:
-      "Our Imena family gathered together, the room glowing with laughter and joy.After weeks of hard work, we finally took a moment to celebrate each other, sharing stories and playful teasing. Gifts were exchanged with eager hands and sparkling eyes, each present carrying love and thoughtfulness. The air was filled with smiles that seemed to stretch from ear to ear, and every hug felt like a warm reminder of how much we care. In that simple, shining moment, it felt like time itself paused just for us, wrapped in happiness, love, and togetherness.",
-    image: story1,
-    testimonials: [
+// Static testimonials data - keeping unchanged
+const staticTestimonials = [
       { name: "Mutako", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: Ange},
       { name: "Muheto", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: Ange},
       { name: "Mfura", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar:Nziza},
       { name: "Tunga", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: Nziza}
     ]
-  },
-  {
-    id: 2,
-    title: "2021",
-    description:
-      "Back in 2021, our little Year One girls (Isheja, Muhorakeye, Inkindi, Ikuzwe,Karabo, gwiza, Shami) were just tiny sparks of curiosity and joy when they first stepped into the Imena family. Their shy smiles and eager eyes marked the beginning of a beautiful journey among us. Today, looking at them, it’s incredible to see how much they’ve grown—blossoming into our lively, confident “maimiess,” full of energy, laughter, and warmth. From those first timid steps to the cheerful presence they bring now, their journey has been a testament to growth, friendship, and the loving embrace of our Imena family.",
-    image:
-      story2,
-      testimonials: [
-      { name: "Mutako", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%231d4ed8'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" },
-      { name: "Muheto", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%23634db7'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" },
-      { name: "Mfura", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%23065f46'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" },
-      { name: "Tunga", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%23065f46'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" }
-    ]
-  },
-  {
-    id: 3,
-    title: "2022",
-    description:
-      "After our family gathering in 2022, the air was buzzing with happiness and laughter. Everyone was glowing with joy from the time spent together, sharing stories, smiles, and little moments of fun. To capture the memory, we all huddled close for a group photo, grinning from ear to ear, each face radiating warmth and love. That snapshot wasn’t just a picture—it was a frozen piece of our happiness, a reminder of the laughter we shared and the bond that keeps our family so wonderfully connected.",
-    image:
-      story3,
-      testimonials: [
-      { name: "Mutako", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%231d4ed8'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" },
-      { name: "Muheto", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%23634db7'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" },
-      { name: "Mfura", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%23065f46'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" },
-      { name: "Tunga", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%23065f46'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" }
-    ]
-  },
-   {
-    id: 4,
-    title: "2023",
-    description:
-      "The morning stretched wide across the valley, spilling sunlight over the hills like liquid gold, catching on the dew that clung stubbornly to blades of grass and leaves, each drop trembling as though it held the memory of the night’s chill, and the breeze carried with it a faint murmur of unseen lives stirring, insects whispering in the underbrush, birds flashing quick between branches, while far away, a river twisted lazily, its surface shimmering in broken fragments of light, a ribbon that both divided and united the land as it rolled past meadows and scattered cottages with smoke curling from their chimneys; the path along the ridge was worn with countless footsteps.",
-    image: story4,
-    testimonials: [
-      { name: "Mutako", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%231d4ed8'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" },
-      { name: "Muheto", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%23634db7'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" },
-      { name: "Mfura", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%23065f46'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" },
-      { name: "Tunga", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%23065f46'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" }
-    ]
-  },
-  {
-    id: 4,
-    title: "2024",
-    description:
-      "The morning stretched wide across the valley, spilling sunlight over the hills like liquid gold, catching on the dew that clung stubbornly to blades of grass and leaves, each drop trembling as though it held the memory of the night’s chill, and the breeze carried with it a faint murmur of unseen lives stirring, insects whispering in the underbrush, birds flashing quick between branches, while far away, a river twisted lazily, its surface shimmering in broken fragments of light, a ribbon that both divided and united the land as it rolled past meadows and scattered cottages with smoke curling from their chimneys; the path along the ridge was worn with countless footsteps.",
-    image: story5,
-    testimonials: [
-      { name: "Mutako", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%231d4ed8'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" },
-      { name: "Muheto", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%23634db7'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" },
-      { name: "Mfura", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%23065f46'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" },
-      { name: "Tunga", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%23065f46'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" }
-    ]
-  },
-  {
-    id: 4,
-    title: "2025",
-    description:
-      "The morning stretched wide across the valley, spilling sunlight over the hills like liquid gold, catching on the dew that clung stubbornly to blades of grass and leaves, each drop trembling as though it held the memory of the night’s chill, and the breeze carried with it a faint murmur of unseen lives stirring, insects whispering in the underbrush, birds flashing quick between branches, while far away, a river twisted lazily, its surface shimmering in broken fragments of light, a ribbon that both divided and united the land as it rolled past meadows and scattered cottages with smoke curling from their chimneys; the path along the ridge was worn with countless footsteps.",
-    image: story6,
-    testimonials: [
-      { name: "Mutako", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%231d4ed8'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" },
-      { name: "Muheto", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%23634db7'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" },
-      { name: "Mfura", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%23065f46'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" },
-      { name: "Tunga", quote: "I had an amazing experience working with this team. They were professional, attentive, and always ready to listen to my needs. The project was delivered on time, with high quality, and far exceeded my expectations. I truly appreciate their dedication and would highly recommend them to anyone looking for reliable and outstanding service.", avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 96 96'><rect width='96' height='96' rx='48' fill='%23065f46'/><circle cx='48' cy='36' r='16' fill='white' fill-opacity='0.85'/><rect x='20' y='56' width='56' height='24' rx='12' fill='white' fill-opacity='0.85'/></svg>" }
-    ]
-  },
-]
+
+// Simple block content renderer for Sanity's portable text
+const renderBlockContent = (blocks) => {
+  if (!blocks || !Array.isArray(blocks)) return "No content available."
+  
+  return blocks.map((block, index) => {
+    if (block._type === 'block') {
+      return (
+        <p key={index} className="mb-3">
+          {block.children?.map((child, childIndex) => {
+            if (child.marks && child.marks.length > 0) {
+              let element = child.text
+              child.marks.forEach(mark => {
+                if (mark === 'strong') {
+                  element = <strong key={childIndex}>{element}</strong>
+                } else if (mark === 'em') {
+                  element = <em key={childIndex}>{element}</em>
+                }
+              })
+              return element
+            }
+            return child.text
+          })}
+        </p>
+      )
+    }
+    return null
+  })
+}
 
 export default function PaginatedShowcase() {
   const [pageIndex, setPageIndex] = useState(0)
+  const [stories, setStories] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const current = useMemo(() => pagesData[pageIndex], [pageIndex])
+  useEffect(() => {
+    let isMounted = true
+    
+    const fetchStories = async () => {
+      try {
+        const data = await client.fetch(
+          `*[_type == "story"]|order(_createdAt asc){
+            _id,
+            title,
+            body,
+            "imageUrl": coalesce(image.asset->url, mainImage.asset->url)
+          }`
+        )
+        if (isMounted && Array.isArray(data)) {
+          setStories(data)
+        }
+      } catch (error) {
+        console.error('Error fetching stories:', error)
+      } finally {
+        if (isMounted) {
+          setLoading(false)
+        }
+      }
+    }
+
+    fetchStories()
+    
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const current = useMemo(() => {
+    if (loading || !stories[pageIndex]) {
+      return {
+        title: "Loading...",
+        body: "Please wait while we load the story content.",
+        image: "",
+        testimonials: staticTestimonials
+      }
+    }
+    
+    const story = stories[pageIndex]
+    return {
+      title: story.title || "Untitled",
+      body: story.body || [],
+      image: story.imageUrl || "",
+      testimonials: staticTestimonials
+    }
+  }, [pageIndex, stories, loading])
+
   const isFirst = pageIndex === 0
-  const isLast = pageIndex === pagesData.length - 1
+  const isLast = pageIndex === (stories.length - 1)
 
   const goPrev = () => !isFirst && setPageIndex((i) => Math.max(0, i - 1))
-  const goNext = () => !isLast && setPageIndex((i) => Math.min(pagesData.length - 1, i + 1))
+  const goNext = () => !isLast && setPageIndex((i) => Math.min(stories.length - 1, i + 1))
   const goTo = (i) => setPageIndex(i)
 
   return (
@@ -112,35 +113,41 @@ export default function PaginatedShowcase() {
           <div className="inline-flex items-center gap-2">
             <span className="text-xs text-gray-500">Page</span>
             <span className="text-sm font-medium text-blue-700">
-              {pageIndex + 1} / {pagesData.length}
+              {pageIndex + 1} / {stories.length || 1}
             </span>
           </div>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
           <div className="relative overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+            {current.image ? (
             <img
-              key={current.id}
+                key={current.title}
               src={current.image}
               alt={current.title}
               className="h-[900px] sm:h-[500px] w-full object-cover transition-all duration-500 ease-out opacity-0 [animation:fade-in_.6s_ease-out_forwards]"
             />
+            ) : (
+              <div className="h-[900px] sm:h-[500px] w-full bg-gray-100 flex items-center justify-center">
+                <span className="text-gray-500">No image available</span>
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col justify-between rounded-xl border border-gray-200 bg-white p-5 sm:p-6 shadow-sm">
             <div>
               <h2
-                key={`title-${current.id}`}
+                key={`title-${current.title}`}
                 className="text-xl sm:text-2xl font-semibold text-gray-900 transition-all duration-500 ease-out opacity-0 [animation:slide-up_.5s_ease-out_forwards]"
               >
                 {current.title}
               </h2>
-              <p
-                key={`desc-${current.id}`}
+              <div
+                key={`desc-${current.title}`}
                 className="mt-3 text-sm sm:text-base text-gray-600 leading-relaxed transition-all duration-500 ease-out opacity-0 [animation:slide-up_.6s_.1s_ease-out_forwards]"
               >
-                {current.description}
-              </p>
+                {typeof current.body === 'string' ? current.body : renderBlockContent(current.body)}
+              </div>
             </div>
 
             <nav className="mt-6 flex items-center justify-between">
@@ -164,9 +171,9 @@ export default function PaginatedShowcase() {
               </button>
 
               <div className="flex items-center gap-2" aria-label="Pagination">
-                {pagesData.map((p, i) => (
+                {stories.map((story, i) => (
                   <button
-                    key={p.id}
+                    key={story._id || i}
                     onClick={() => goTo(i)}
                     aria-label={`Go to page ${i + 1}`}
                     className={
